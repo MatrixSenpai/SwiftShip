@@ -7,8 +7,6 @@
 
 import Foundation
 
-typealias Location = (x: HorizontalGrid, y: VerticalGrid, orientation: ShipOrientation)
-
 enum ShipType: Int, CaseIterable {
     case carrier, battleship, cruiser, submarine, destroyer
 }
@@ -39,7 +37,7 @@ class Ship {
         print("Enter 'v' for vertical or 'h' for horizontal")
         let o = getPosition(ShipOrientation.self)
         
-        location = (x, y, o)
+        location = Location(x, y, o)
     }
     
     func getPosition<T: Grid>(_ type: T.Type) -> T {
@@ -54,7 +52,7 @@ class Ship {
     
     func place(letter: HorizontalGrid, number: VerticalGrid, orientation: ShipOrientation) -> Bool {
         if !isWithinBounds(x: letter, y: number, o: orientation) { return false }
-        location = (letter, number, orientation)
+        location = Location(letter, number, orientation)
         return true
     }
     
@@ -66,11 +64,16 @@ class Ship {
         }
     }
     
-    func isInLocation(_ location: Location) -> Bool {
-        var cl = self.location
+    func isInLocation(_ location: XYGrid) -> Bool {
+        guard var cl = self.location else { return false }
         for _ in 0..<size {
-            
+            if cl.grid == location { return true }
+            else {
+                cl = cl.next()
+            }
         }
+        
+        return false
     }
 }
 

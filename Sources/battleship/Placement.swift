@@ -7,6 +7,42 @@
 
 import Foundation
 
+struct XYGrid: Equatable, CustomStringConvertible {
+    let x: HorizontalGrid
+    let y: VerticalGrid
+    
+    var description: String {
+        return "\(x.description)\(y.description)"
+    }
+    
+    init(x: HorizontalGrid, y: VerticalGrid) {
+        self.x = x
+        self.y = y
+    }
+}
+struct Location {
+    let grid       : XYGrid
+    let orientation: ShipOrientation
+    
+    init(_ x: HorizontalGrid, _ y: VerticalGrid, _ orientation: ShipOrientation) {
+        self.grid = XYGrid(x: x, y: y)
+        self.orientation = orientation
+    }
+    
+    func next() -> Location {
+        switch orientation {
+        case .horizontal: return Location(grid.x.next, grid.y, orientation)
+        case .vertical  : return Location(grid.x, grid.y.next, orientation)
+        }
+    }
+    func previous() -> Location {
+        switch orientation {
+        case .horizontal: return Location(grid.x.previous, grid.y, orientation)
+        case .vertical  : return Location(grid.x, grid.y.previous, orientation)
+        }
+    }
+}
+
 protocol Grid where Self: CaseIterable, Self: CustomStringConvertible {
     var rawValue: Int { get }
     

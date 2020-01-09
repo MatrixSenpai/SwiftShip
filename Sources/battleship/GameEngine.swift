@@ -2,39 +2,51 @@
 //  File.swift
 //  
 //
-//  Created by Mason Phillips on 1/4/20.
+//  Created by Mason Phillips on 1/9/20.
 //
 
 import Foundation
 
-class GameEngine {
-    let menu  = MenuHandler<MainMenu>()
-    var stats = StatisticsManager()
+struct GameEngine {
+    var playerOne: Player!
+    var playerTwo: Player!
     
-    func run() {
-        while(true) {
-            let selection = menu.renderMenu()
-            
-            switch selection {
-            case .quit: runExit()
-            case .play:
-                break
-            case .stats:
-                stats.checkOrAddPlayer()
-            case .settings:
-                break
-            }
+    enum PlayerTurn: Equatable {
+        case one, two
+        
+        static prefix func !(l: PlayerTurn) -> PlayerTurn {
+            return (l == .one) ? .two : one
         }
     }
     
-    func play() {
-        
+    var stats    : StatisticsManager
+    
+    init(stats: StatisticsManager) {
+        self.stats = stats
     }
     
-    func runExit() {
-        stats.saveData()
+    mutating func play() {
+        selectPlayers()
         
+        var turnFlag: PlayerTurn = .one
         
-        exit(0)
+        while(true) {
+            guard var targeter = ((turnFlag == .one) ? playerOne : playerTwo) else { fatalError("Players not set?") }
+            guard var targetee = ((turnFlag == .one) ? playerTwo : playerOne) else { fatalError("Players not set?") }
+            
+            let location = targeter.turn()
+            let wasHit = targetee.check(location: location)
+            (wasHit) ? targeter.wasHit(location: location) : targeter.wasMiss(location: location)
+            
+            print("\(location): \((wasHit) ? "Hit!" : "Miss!")")
+            turnFlag = !turnFlag
+            
+            sleep(2)
+        }
+    }
+    
+    mutating func selectPlayers() {
+        playerOne = Player(player: Statistic(name: "Matrix"))
+        playerTwo = Player(player: Statistic(name: "Computer"))
     }
 }
