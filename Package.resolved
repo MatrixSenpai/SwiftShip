@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "LibSnowflake",
+        "repositoryURL": "https://github.com/MatrixSenpai/LibSnowflake",
+        "state": {
+          "branch": null,
+          "revision": "77ee2e599360a05d1b8222433eb3c277de84bd9e",
+          "version": "1.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
