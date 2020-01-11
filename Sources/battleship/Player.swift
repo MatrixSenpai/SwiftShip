@@ -25,7 +25,8 @@ struct Player: CustomStringConvertible {
         self.player = player
     }
     
-    func place() {
+    mutating func place() {
+        placement.place()
     }
     
     mutating func turn() -> XYGrid {

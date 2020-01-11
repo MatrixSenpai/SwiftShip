@@ -28,6 +28,9 @@ struct GameEngine {
     mutating func play() {
         selectPlayers()
         
+        playerOne.place()
+        playerTwo.place()
+        
         var turnFlag: PlayerTurn = .one
         
         while(true) {

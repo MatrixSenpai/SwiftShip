@@ -31,8 +31,8 @@ struct Location {
     
     func next() -> Location {
         switch orientation {
-        case .horizontal: return Location(grid.x.next, grid.y, orientation)
-        case .vertical  : return Location(grid.x, grid.y.next, orientation)
+        case .horizontal: return Location(grid.x, grid.y.next, orientation)
+        case .vertical  : return Location(grid.x.next, grid.y, orientation)
         }
     }
     func previous() -> Location {
@@ -100,10 +100,32 @@ enum HorizontalGrid: Int, Grid, CaseIterable, CustomStringConvertible {
     }
     
     var next: HorizontalGrid {
-        return .alpha
+        switch self {
+        case .alpha  : return .bravo
+        case .bravo  : return .charlie
+        case .charlie: return .delta
+        case .delta  : return .echo
+        case .echo   : return .fox
+        case .fox    : return .golf
+        case .golf   : return .hotel
+        case .hotel  : return .india
+        case .india  : return .juliet
+        case .juliet : return .alpha
+        }
     }
     var previous: HorizontalGrid {
-        return .alpha
+        switch self {
+        case .alpha  : return .juliet
+        case .bravo  : return .alpha
+        case .charlie: return .bravo
+        case .delta  : return .charlie
+        case .echo   : return .delta
+        case .fox    : return .echo
+        case .golf   : return .fox
+        case .hotel  : return .golf
+        case .india  : return .hotel
+        case .juliet : return .india
+        }
     }
 }
 
@@ -132,9 +154,31 @@ enum VerticalGrid: Int, Grid, CaseIterable, CustomStringConvertible {
     }
     
     var next: VerticalGrid {
-        return .one
+        switch self {
+        case .one  : return .two
+        case .two  : return .three
+        case .three: return .four
+        case .four : return .five
+        case .five : return .six
+        case .six  : return .seven
+        case .seven: return .eight
+        case .eight: return .nine
+        case .nine : return .ten
+        case .ten  : return .one
+        }
     }
     var previous: VerticalGrid {
-        return .one
+        switch self {
+        case .one  : return .ten
+        case .two  : return .one
+        case .three: return .two
+        case .four : return .three
+        case .five : return .four
+        case .six  : return .five
+        case .seven: return .six
+        case .eight: return .seven
+        case .nine : return .eight
+        case .ten  : return .nine
+        }
     }
 }

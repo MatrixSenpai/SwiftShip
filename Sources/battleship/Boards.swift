@@ -13,7 +13,24 @@ struct PlacementBoard: CustomStringConvertible {
     var misses: [XYGrid] = []
     
     var description: String {
-        return ""
+        var board = Array(repeating: Array(repeating: "*", count: 10), count: 10)
+        board = buildPositionMisses(board: board)
+        board = buildPositionShips(board: board)
+        
+        var rtr = "+---".repeat(10) + "+\n"
+        
+        for row in board {
+            rtr += "+"
+            for i in 0..<row.count {
+                rtr += " \(row[i])"
+                rtr += (i == (row.count - 1) ? " +\n" : "  ")
+            }
+//            rtr += "+\n"
+        }
+        
+        rtr += "+---".repeat(10) + "+\n"
+        
+        return rtr
     }
     
     mutating func target(_ location: XYGrid) -> Bool {
@@ -45,6 +62,31 @@ struct PlacementBoard: CustomStringConvertible {
         let destroyer = Destroyer()
         _ = destroyer.place(letter: .echo, number: .one, orientation: .horizontal)
         ships[.destroyer] = destroyer
+    }
+    
+    func buildPositionMisses(board: [[String]]) -> [[String]] {
+        var mutable = board
+        for position in misses {
+            mutable[position.x.rawValue][position.y.rawValue] = "O"
+        }
+        return mutable
+    }
+    func buildPositionShips(board: [[String]]) -> [[String]] {
+        var mutable = board
+        
+        for (_, ship) in ships {
+            var loc = ship.location
+            for _ in 0..<ship.size {
+                mutable[loc!.grid.x.rawValue][loc!.grid.y.rawValue] = "O"
+                loc = loc!.next()
+            }
+            
+            for hit in ship.hit {
+                mutable[hit.grid.x.rawValue][hit.grid.y.rawValue] = "X"
+            }
+        }
+        
+        return mutable
     }
 }
 
